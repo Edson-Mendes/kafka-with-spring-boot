@@ -9,7 +9,12 @@ spring:
 
   # Kafka
   kafka:
+    template:
+      default-topic: library-events
     producer:
       bootstrap-servers: localhost:19092,localhost:29092,localhost:39092
       key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    admin:
+      properties:
+        bootstrap.servers: localhost:19092,localhost:29092,localhost:39092

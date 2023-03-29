@@ -16,7 +16,7 @@ public class LibraryEventsController {
 
   private final Random random = new Random();
 
-  @PostMapping("/v1/libraryevent")
+  @PostMapping("/v1/libraryevents")
   public ResponseEntity<LibraryEvent> postLibraryEvent(@RequestBody LibraryEvent libraryEvent) {
 
     // Invoke Kafka Producer
