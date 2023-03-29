@@ -1,13 +1,13 @@
 package com.emendes.controller;
 
 import com.emendes.domain.LibraryEvent;
+import com.emendes.domain.LibraryEventType;
 import com.emendes.producer.LibraryEventProducer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,12 +24,9 @@ public class LibraryEventsController {
   @PostMapping("/v1/libraryevents")
   public ResponseEntity<LibraryEvent> postLibraryEvent(@RequestBody LibraryEvent libraryEvent) throws JsonProcessingException, ExecutionException, InterruptedException {
 
-    log.info("Before sendLibraryEvent");
-
+    libraryEvent.setLibraryEventType(LibraryEventType.NEW);
     libraryEventProducer.sendLibraryEvent_Approach2(libraryEvent);
-    log.info("After sendLibraryEvent");
 
-    log.info("A LibraryEvent was sent!");
     return ResponseEntity.status(HttpStatus.CREATED).body(libraryEvent);
   }
 
