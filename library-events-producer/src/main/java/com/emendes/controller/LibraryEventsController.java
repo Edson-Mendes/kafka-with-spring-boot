@@ -26,9 +26,7 @@ public class LibraryEventsController {
 
     log.info("Before sendLibraryEvent");
 
-//    libraryEventProducer.sendLibraryEvent(libraryEvent);
-    SendResult<Integer, String> sendResult = libraryEventProducer.sendLibraryEventSynchronous(libraryEvent);
-    log.info("SendResult is {}", sendResult.toString());
+    libraryEventProducer.sendLibraryEvent_Approach2(libraryEvent);
     log.info("After sendLibraryEvent");
 
     log.info("A LibraryEvent was sent!");
