@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -90,6 +91,95 @@ class LibraryEventsControllerTest {
 
     mockMvc.perform(post("/v1/libraryevents")
         .content(content)
+        .contentType(MediaType.APPLICATION_JSON)
+    ).andExpect(status().isBadRequest()).andExpect(content().string(expectedErrorMessage));
+  }
+
+  @Test
+  @DisplayName("Must return status 200 when put successfully")
+  void updateLibraryEvent() throws Exception {
+    // given
+    Book book = Book.builder()
+        .bookId(100)
+        .bookName("Spring Boot")
+        .bookAuthor("Edson Mendes")
+        .build();
+
+    LibraryEvent libraryEvent = LibraryEvent.builder()
+        .libraryEventId(10000)
+        .book(book)
+        .build();
+
+    String content = mapper.writeValueAsString(libraryEvent);
+
+    when(libraryEventProducerMock.sendLibraryEvent_Approach2(any(LibraryEvent.class)))
+        .thenReturn(any());
+
+    mockMvc.perform(put("/v1/libraryevents")
+        .content(content)
+        .contentType(MediaType.APPLICATION_JSON)
+    ).andExpect(status().isOk());
+  }
+
+  @Test
+  @DisplayName("Must return status 400 when payload is invalid")
+  void updateLibraryEvent_withInvalidPayload() throws Exception {
+    // given
+
+    LibraryEvent libraryEvent = LibraryEvent.builder()
+        .libraryEventId(null)
+        .book(null)
+        .build();
+
+    String content = mapper.writeValueAsString(libraryEvent);
+
+    mockMvc.perform(put("/v1/libraryevents")
+        .content(content)
+        .contentType(MediaType.APPLICATION_JSON)
+    ).andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @DisplayName("Must return status 400 when book data is invalid")
+  void updateLibraryEvent_withInvalidBookData() throws Exception {
+    // given
+    LibraryEvent libraryEvent = LibraryEvent.builder()
+        .libraryEventId(null)
+        .book(new Book())
+        .build();
+
+    String actualContent = mapper.writeValueAsString(libraryEvent);
+
+    String expectedErrorMessage =
+        "book.bookAuthor - must not be blank, book.bookId - must not be null, book.bookName - must not be blank";
+
+    mockMvc.perform(put("/v1/libraryevents")
+        .content(actualContent)
+        .contentType(MediaType.APPLICATION_JSON)
+    ).andExpect(status().isBadRequest()).andExpect(content().string(expectedErrorMessage));
+  }
+
+  @Test
+  @DisplayName("Must return status 400 when LibraryEventId is null")
+  void updateLibraryEvent_withNullLibraryEventId() throws Exception {
+    // given
+    Book book = Book.builder()
+        .bookId(100)
+        .bookName("Spring Boot")
+        .bookAuthor("Edson Mendes")
+        .build();
+
+    LibraryEvent libraryEvent = LibraryEvent.builder()
+        .libraryEventId(null)
+        .book(book)
+        .build();
+
+    String actualContent = mapper.writeValueAsString(libraryEvent);
+
+    String expectedErrorMessage = "LibraryEventId must not be null";
+
+    mockMvc.perform(put("/v1/libraryevents")
+        .content(actualContent)
         .contentType(MediaType.APPLICATION_JSON)
     ).andExpect(status().isBadRequest()).andExpect(content().string(expectedErrorMessage));
   }

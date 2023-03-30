@@ -85,4 +85,35 @@ class LibraryEventsControllerTest {
 
     Assertions.assertThat(actualRecord).isNotNull().isEqualTo(expectedRecord);
   }
+
+  @Test
+  @DisplayName("Must return LibraryEvent when put successfully")
+  void updateLibraryEvent() {
+    // given
+    Book book = Book.builder()
+        .bookId(100)
+        .bookName("Spring Boot")
+        .bookAuthor("Edson Mendes")
+        .build();
+
+    LibraryEvent libraryEvent = LibraryEvent.builder()
+        .libraryEventId(1000)
+        .book(book)
+        .build();
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    HttpEntity<LibraryEvent> request = new HttpEntity<>(libraryEvent, headers);
+
+    // when
+    ResponseEntity<LibraryEvent> actualResponse = restTemplate
+        .exchange("/v1/libraryevents", HttpMethod.PUT, request, LibraryEvent.class);
+
+    // then
+    ConsumerRecord<Integer, String> singleRecord = KafkaTestUtils.getSingleRecord(consumer, "library-events");
+    String expectedRecord = "{\"libraryEventId\":1000,\"libraryEventType\":\"UPDATE\",\"book\":{\"bookId\":100,\"bookName\":\"Spring Boot\",\"bookAuthor\":\"Edson Mendes\"}}";
+    String actualRecord = singleRecord.value();
+
+    Assertions.assertThat(actualResponse.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+    Assertions.assertThat(actualRecord).isNotNull().isEqualTo(expectedRecord);
+  }
 }
