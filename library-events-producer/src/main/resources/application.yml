@@ -15,6 +15,9 @@ spring:
       bootstrap-servers: localhost:19092,localhost:29092,localhost:39092
       key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        retries: 10
+        acks: all
     admin:
       properties:
         bootstrap.servers: localhost:19092,localhost:29092,localhost:39092
