@@ -13,10 +13,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,7 +47,8 @@ class LibraryEventsControllerTest {
 
     String content = mapper.writeValueAsString(libraryEvent);
 
-    doNothing().when(libraryEventProducerMock).sendLibraryEvent_Approach2(any(LibraryEvent.class));
+    when(libraryEventProducerMock.sendLibraryEvent_Approach2(any(LibraryEvent.class)))
+        .thenReturn(any());
 
     mockMvc.perform(post("/v1/libraryevents")
         .content(content)
@@ -68,8 +68,6 @@ class LibraryEventsControllerTest {
 
     String content = mapper.writeValueAsString(libraryEvent);
 
-    doNothing().when(libraryEventProducerMock).sendLibraryEvent_Approach2(any(LibraryEvent.class));
-
     mockMvc.perform(post("/v1/libraryevents")
         .content(content)
         .contentType(MediaType.APPLICATION_JSON)
@@ -87,10 +85,8 @@ class LibraryEventsControllerTest {
 
     String content = mapper.writeValueAsString(libraryEvent);
 
-    doNothing().when(libraryEventProducerMock).sendLibraryEvent_Approach2(any(LibraryEvent.class));
-
     String expectedErrorMessage =
-        "book.bookAuthor - must not be blank, book.bookName - must not be blank, book.bookId - must not be null";
+        "book.bookAuthor - must not be blank, book.bookId - must not be null, book.bookName - must not be blank";
 
     mockMvc.perform(post("/v1/libraryevents")
         .content(content)

@@ -18,7 +18,9 @@ public class LibraryEventControllerAdvice {
   public ResponseEntity<?> handleRequestBody(MethodArgumentNotValidException ex) {
     List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
     String errorMessage = fieldErrors
-        .stream().map(fe -> fe.getField() + " - " + fe.getDefaultMessage()).collect(Collectors.joining(", "));
+        .stream().map(fe -> fe.getField() + " - " + fe.getDefaultMessage())
+        .sorted()
+        .collect(Collectors.joining(", "));
 
     log.info("errorMessage : {}", errorMessage);
 
