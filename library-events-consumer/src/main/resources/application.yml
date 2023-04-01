@@ -7,6 +7,7 @@ server:
 ---
 spring:
   profiles: local
+
   # Kafka
   kafka:
     consumer:
@@ -14,3 +15,25 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.IntegerDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       group-id: library-events-listener-group
+
+  # Datasource
+  datasource:
+    url: jdbc:h2:mem:test-db
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  #JPA
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format-sql: true
+
+  # H2
+  h2:
+    console:
+      enabled: true
