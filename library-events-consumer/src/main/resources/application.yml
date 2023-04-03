@@ -37,3 +37,42 @@ spring:
   h2:
     console:
       enabled: true
+
+---
+spring:
+  profiles: test
+
+  # Kafka
+  kafka:
+    template:
+      default-topic: library-events
+    consumer:
+      bootstrap-servers: localhost:19092,localhost:29092,localhost:39092
+      key-deserializer: org.apache.kafka.common.serialization.IntegerDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      group-id: library-events-listener-group
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+  # Datasource
+  datasource:
+    url: jdbc:h2:mem:test-db
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  #JPA
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format-sql: true
+
+  # H2
+  h2:
+    console:
+      enabled: true
