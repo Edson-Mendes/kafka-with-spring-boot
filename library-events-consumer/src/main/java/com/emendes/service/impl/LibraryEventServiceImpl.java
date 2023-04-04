@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -25,6 +26,11 @@ public class LibraryEventServiceImpl implements LibraryEventService {
     try {
       LibraryEvent libraryEvent = mapper.readValue(consumerRecord.value(), LibraryEvent.class);
       log.info("LibraryEvent : {}", libraryEvent);
+
+      // Apenas para testes
+      if (libraryEvent.getLibraryEventId() == 999){
+        throw new RecoverableDataAccessException("Something went wrong!");
+      }
 
       switch (libraryEvent.getLibraryEventType()) {
         case NEW -> save(libraryEvent);

@@ -11,3 +11,10 @@ curl -i \
 -d '{"libraryEventId":11111,"book":{"bookId":456,"bookName":"Kafka Using Spring Boot","bookAuthor":"Dilip"}}' \
 -H "Content-Type: application/json" \
 -X PUT http://localhost:8081/v1/libraryevents
+
+PUT WITH STATUS
+---------------------
+curl -i \
+-d '{"libraryEventId":999,"book":{"bookId":456,"bookName":"Kafka Using Spring Boot","bookAuthor":"Dilip"}}' \
+-H "Content-Type: application/json" \
+-X PUT http://localhost:8081/v1/libraryevents

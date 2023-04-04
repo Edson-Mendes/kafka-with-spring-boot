@@ -10,13 +10,16 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-public class LibraryEventsConsumer {
+public class LibraryEventsRetryConsumer {
 
   private final LibraryEventService libraryEventService;
 
-  @KafkaListener(topics = {"library-events"}, groupId = "library-events-listener-group")
+  @KafkaListener(
+      autoStartup = "${retryListener.startup:true}",
+      topics = {"${topics.retry}"},
+      groupId = "retry-listener-group")
   public void onMessage(ConsumerRecord<Integer, String> consumerRecord) {
-    log.info("ConsumerRecord : {}", consumerRecord);
+    log.info("ConsumerRecord in RETRY Consumer: {}", consumerRecord);
 
     libraryEventService.processLibraryEvent(consumerRecord);
   }
