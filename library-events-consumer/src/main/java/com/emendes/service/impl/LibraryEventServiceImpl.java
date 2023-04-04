@@ -28,7 +28,7 @@ public class LibraryEventServiceImpl implements LibraryEventService {
       log.info("LibraryEvent : {}", libraryEvent);
 
       // Apenas para testes
-      if (libraryEvent.getLibraryEventId() == 999){
+      if (libraryEvent.getLibraryEventId() != null && libraryEvent.getLibraryEventId() == 999){
         throw new RecoverableDataAccessException("Something went wrong!");
       }
 
