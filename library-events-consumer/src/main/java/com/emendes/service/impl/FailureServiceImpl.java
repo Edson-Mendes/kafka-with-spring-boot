@@ -27,8 +27,6 @@ public class FailureServiceImpl implements FailureService {
         .status(status)
         .build();
 
-    log.info("inside saveFailedRecord with status : {}", status);
-
     failureRecordRepository.save(failureRecord);
   }
 }

@@ -30,6 +30,7 @@ public class LibraryEventConsumerConfig {
 
   public static final String RETRY = "RETRY";
   public static final String DEAD = "DEAD";
+  public static final String SUCCESS = "SUCCESS";
 
   @Autowired
   private KafkaTemplate<Integer, String> kafkaTemplate;
@@ -56,6 +57,7 @@ public class LibraryEventConsumerConfig {
 
     return recoverer;
   }
+
 
   public ConsumerRecordRecoverer consumerRecordRecoverer = ((consumerRecord, e) -> {
     log.info("Exception in consumerRecordRecover : {}", e.getMessage());
